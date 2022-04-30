@@ -6,7 +6,7 @@ SELECT * FROM times;
 SELECT * FROM jogos;
 
 
-// trigger que impede insert, update, delete nas tabelas de times e jogos
+--trigger que impede insert, update, delete nas tabelas de times e jogos
 
 CREATE TRIGGER tg_prevent_times
 ON times
@@ -26,7 +26,7 @@ BEGIN
 	ROLLBACK;
 END
 
-//trigger para impedir o insert e delete na tabela jogos
+--trigger para impedir o insert e delete na tabela jogos
 
 CREATE TRIGGER tg_prevent_jogos
 ON jogos
@@ -37,8 +37,15 @@ BEGIN
 	ROLLBACK;
 END
 
-insert into jogos(timeCasa, grupoCasa, golsCasa, timeFora, grupoFora, golsFora, data)
-values
-('Novorizontino',	'A',	4,	'Ituano',	'B',	4,	'2022-04-03')
+select * from campeonato
+
+SELECT * from JOGOS where timeCasa = 11 or timeFora = 11
+
+UPDATE jogos
+SET golsFora = 20
+WHERE timeFora  = 11
+
+OR timeFora = 11
 
 
+SELECT nome from times where codigoTime = 11
