@@ -1,6 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,7 +12,7 @@
 <body>
 
 	<section class="main">
-	
+
 		<h1>CAMPEONATO DE FUTEBOLA</h1>
 
 		<h1>
@@ -27,7 +27,8 @@
 			</form>
 
 			<br> <a class="btn" href="campeonato?action=getTimes">mostrar
-				grupos</a>
+				grupos</a> <br> <a class="btn"
+				href="campeonato?action=getTimesResultado">resultado geral</a>
 
 		</div>
 
@@ -53,7 +54,7 @@
 			</c:if>
 
 			<c:if test="${not empty jogos }">
-                <h1>Edite o resultado dos jogos</h1>
+				<h1>Edite o resultado dos jogos</h1>
 
 				<table border="1px" cellpadding="5px" cellspacing="0">
 
@@ -66,34 +67,70 @@
 						<th>GOLS FORA</th>
 						<th>DATA</th>
 					</tr>
-                    <form>
-                        <c:forEach var="jogo" items="${jogos }">
-                            <tr>
-                                <td>${jogo.timeCasa}</td>
-                                <td>${jogo.grupoCasa}</td>
+					<form>
+						<c:forEach var="jogo" items="${jogos }">
+							<tr>
+								<td>${jogo.timeCasa}</td>
+								<td>${jogo.grupoCasa}</td>
 
-                                <td>
-                                   <input type="text" value=${jogo.golsCasa} />
-                                </td>
+								<td><input type="text" value=${jogo.golsCasa } /></td>
 
-                                <td>${jogo.timeFora}</td>
-                                <td>${jogo.grupoFora}</td>
+								<td>${jogo.timeFora}</td>
+								<td>${jogo.grupoFora}</td>
 
-                                <td>
-                                    <input type="text" value=${jogo.golsFora} />
-                                </td>
+								<td><input type="text" value=${jogo.golsFora } /></td>
 
-                                <td>${jogo.data}</td>
-                            </tr>
-                        </c:forEach>
+								<td>${jogo.data}</td>
+							</tr>
+						</c:forEach>
 
-                      <input type="button" value="update resultado das partidas">
+						<input type="button" value="update resultado das partidas">
 
-                    </form>
+					</form>
 				</table>
 
 			</c:if>
 
+
+			<c:if test="${not empty timesResultados }">
+				<h1>Resultado Geral Do Campeonato</h1>
+
+				<table border="1px" cellpadding="5px" cellspacing="0">
+
+					<tr>
+						<th>TIME</th>
+						<th>GRUPO</th>
+						<th>JOGOS DISPUTADOS</th>
+						<th>VITORIAS</th>
+						<th>EMPATES</th>
+						<th>DERROTAS</th>
+						<th>GOLS MARCADOS</th>
+						<th>GOLS SOFRIDOS</th>
+						<th>SALDO GOLS</th>
+						<th>PONTOS</th>
+						<th>SITUAÇÃO</th>
+					</tr>
+
+					<c:forEach var="timeResultado" items="${ timesResultados}">
+						<tr>
+							<td>${timeResultado.nome}</td>
+							<td>${timeResultado.grupo}</td>
+							<td>${timeResultado.jogosDisputados}</td>
+							<td>${timeResultado.vitorias}</td>
+							<td>${timeResultado.empates}</td>
+							<td>${timeResultado.derrotas}</td>
+							<td>${timeResultado.golsMarcados}</td>
+							<td>${timeResultado.golsSofridos}</td>
+							<td>${timeResultado.saldoGols}</td>
+							<td>${timeResultado.pontos}</td>
+							<td>${timeResultado.situacao}</td>
+						</tr>
+					</c:forEach>
+
+
+				</table>
+
+			</c:if>
 
 
 		</div>

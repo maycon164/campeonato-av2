@@ -13,13 +13,13 @@ import org.springframework.stereotype.Component;
 
 import com.fatec.campeonato.model.Jogo;
 import com.fatec.campeonato.model.Time;
+import com.fatec.campeonato.model.TimeResultado;
 
 @Component
 public class TorneioDao implements ITorneioDao {
 
 	@Autowired
 	private GenericDao gDao;
-	
 
 	@Override
 	public List<Time> getTimes() throws SQLException, ClassNotFoundException {
@@ -55,20 +55,65 @@ public class TorneioDao implements ITorneioDao {
 		try {
 			ps = conn.prepareStatement(sql);
 			ps.setDate(1, new java.sql.Date(dataRodada.getTime()));
-			ResultSet rs = ps.executeQuery();	
+			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				Jogo jogo = Jogo.instantiateJogoFromResultSet(rs);
 				listaJogos.add(jogo);
 			}
-			
+
 			rs.close();
 			ps.close();
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		return listaJogos;
+	}
+
+	@Override
+	public List<TimeResultado> getResultadoGeral() throws SQLException, ClassNotFoundException {
+
+		gerarResultadoCampeonato();
+
+		Connection conn = gDao.getConnection();
+		List<TimeResultado> listaTimesResultados = new ArrayList<TimeResultado>();
+		PreparedStatement ps;
+
+		try {
+
+			String sql = "select * from campeonato";
+
+			ps = conn.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				TimeResultado timeResultado = TimeResultado.InstantiateTimeResultadoFromResulteSet(rs);
+				listaTimesResultados.add(timeResultado);
+			}
+
+			rs.close();
+			ps.close();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return listaTimesResultados;
+	}
+
+	private void gerarResultadoCampeonato() throws ClassNotFoundException, SQLException {
+		Connection conn = gDao.getConnection();
+		PreparedStatement ps;
+
+		try {
+			String sql = "EXEC resultado_geral";
+			ps = conn.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+
+		} catch (Exception e) {
+
+		}
 	}
 
 }

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.fatec.campeonato.model.Jogo;
 import com.fatec.campeonato.model.Time;
+import com.fatec.campeonato.model.TimeResultado;
 import com.fatec.campeonato.persistence.TorneioDao;
 
 @Controller
@@ -35,16 +36,22 @@ public class CampeonatoController {
 	@GetMapping("/campeonato")
 	public String campeonato(@RequestParam(value = "action", defaultValue = "none", required = false) String action,
 			Model model) {
+		try {
 
-		if (action.equalsIgnoreCase("getTimes")) {
-			List<Time> times;
-			try {
-				times = torneioDao.getTimes();
+			if (action.equalsIgnoreCase("getTimes")) {
+
+				List<Time> times = torneioDao.getTimes();
 				model.addAttribute("times", times);
-			} catch (SQLException | ClassNotFoundException e) {
-				e.printStackTrace();
+
+			} else if (action.equalsIgnoreCase("getTimesResultado")) {
+
+				List<TimeResultado> timesResultados = torneioDao.getResultadoGeral();
+				model.addAttribute("timesResultados", timesResultados);
+
 			}
 
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
 		}
 
 		return "index";
@@ -62,7 +69,7 @@ public class CampeonatoController {
 		} catch (ParseException | ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 		}
-	
+
 		return "index";
 	}
 
