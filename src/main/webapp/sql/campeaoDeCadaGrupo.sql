@@ -2,6 +2,8 @@ USE campeonato;
 
 DROP FUNCTION classificar_grupos
 
+/*executar a procedure resultado_geral*/
+
 CREATE FUNCTION classificar_grupos()
 RETURNS @tabela TABLE(
 	rownum INT identity(1,1),
@@ -61,4 +63,7 @@ BEGIN
 END
 
 SELECT * FROM classificar_grupos(); 
+
+
+
  

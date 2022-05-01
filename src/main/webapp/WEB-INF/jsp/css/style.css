@@ -5,6 +5,10 @@
 	padding: 0px;
 }
 
+body{
+	background-color: yellow;
+}
+
 table {
 	margin: 0 auto;
 	margin-top: 20px;
@@ -14,4 +18,14 @@ table {
 	width: 600px;
 	margin: 0 auto;
 	padding: 10px;
+}
+
+.CLASSIFICADO{
+	background-color: green;
+	color: white;
+}
+
+.REBAIXADO{
+	background-color: red;
+	color: white;
 }

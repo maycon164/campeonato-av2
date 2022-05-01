@@ -4,36 +4,36 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<link href="./style.css" rel="stylesheet">
+	<meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<base href="${pageContext.request.contextPath}">
+	<link rel="stylesheet" type="text/css" href="css/style.css">
 
-<title>CAMPEONATO DE FUTEBOL</title>
+	<title>CAMPEONATO DE FUTEBOL</title>
 </head>
 <body>
 
 	<section class="main">
+		<h1></h1>
+		<h1>Campeonato de Futebol</h1>
 
-		<h1>CAMPEONATO DE FUTEBOLA</h1>
-
-		<h1>
-			<c:out value="${action }" />
-		</h1>
-
-		<div>
+		<div class="container-botoes">
 			<form action="campeonatoData" method="post">
+
 				<label>SELECIONE UMA DATA AQUI</label> <input id="date" type="date"
 					name="dataRodada"> <input type="submit" value="Buscar"
 					id="button">
+
 			</form>
-
-			<br> <a class="btn" href="campeonato?action=getTimes">mostrar
-				grupos</a> <br> <a class="btn"
-				href="campeonato?action=getTimesResultado">resultado geral</a>
-
+			<br> <a class="btn" href="campeonato?action=getTimes">MOSTRAR
+				GRUPOS</a> <a class="btn" href="campeonato?action=getTimesResultado">RESULTADO
+				GERAL</a>
+			<a class="btn" href="quartas">pegar quartas</a>
 		</div>
 
 
-		<div>
+		<div class="container-tabelas">
 
 			<c:if test="${not empty times }">
 				<table border="1px" cellpadding="5px" cellspacing="0">
@@ -67,26 +67,32 @@
 						<th>GOLS FORA</th>
 						<th>DATA</th>
 					</tr>
-					<form>
+
+					<form action="atualizarResultado" method="post">
+					
 						<c:forEach var="jogo" items="${jogos }">
+							<input type="hidden" id="codigoJogo" name="codigoJogo${jogo.idJogo } " value=${jogo.idJogo }   >
 							<tr>
 								<td>${jogo.timeCasa}</td>
 								<td>${jogo.grupoCasa}</td>
-
-								<td><input type="text" value=${jogo.golsCasa } /></td>
+	
+								<td><input type="text" value=${jogo.golsCasa } name="golsCasa${jogo.idJogo}"/></td>
 
 								<td>${jogo.timeFora}</td>
 								<td>${jogo.grupoFora}</td>
 
-								<td><input type="text" value=${jogo.golsFora } /></td>
+								<td><input type="text" value=${jogo.golsFora } name="golsFora${jogo.idJogo} " /></td>
 
 								<td>${jogo.data}</td>
+								
 							</tr>
+						
 						</c:forEach>
-
-						<input type="button" value="update resultado das partidas">
-
+						
+						<input type="submit" value="update resultado das partidas">							
+					
 					</form>
+
 				</table>
 
 			</c:if>
@@ -112,7 +118,9 @@
 					</tr>
 
 					<c:forEach var="timeResultado" items="${ timesResultados}">
-						<tr>
+
+						<tr class="<c:out value = "${timeResultado.situacao}"/>">
+
 							<td>${timeResultado.nome}</td>
 							<td>${timeResultado.grupo}</td>
 							<td>${timeResultado.jogosDisputados}</td>
@@ -124,9 +132,10 @@
 							<td>${timeResultado.saldoGols}</td>
 							<td>${timeResultado.pontos}</td>
 							<td>${timeResultado.situacao}</td>
-						</tr>
-					</c:forEach>
 
+						</tr>
+
+					</c:forEach>
 
 				</table>
 

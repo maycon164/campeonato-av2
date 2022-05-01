@@ -44,9 +44,11 @@ EXEC sortearGrupos;
 
 ------------–––––------------–––––------------–––––------------–––––------------–––––------------–––––
 -- VIEW DOS TIMES COM O SEU GRUPO
+DROP VIEW vw_time_grupo 
+
 CREATE VIEW vw_time_grupo
 AS
-	SELECT t.nome, g.sigla FROM times t, grupo g, grupos gp
+	SELECT t.codigoTime, t.nome, g.sigla FROM times t, grupo g, grupos gp
 	WHERE t.codigoTime = gp.codigoTime 
 	AND g.sigla = gp.codigoGrupo 
 

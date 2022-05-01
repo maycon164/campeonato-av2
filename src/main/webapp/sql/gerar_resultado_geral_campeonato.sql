@@ -47,6 +47,6 @@ BEGIN
 	
 END
 
-EXEC resultado_geral 
+EXEC resultado_geral;
 
 SELECT * FROM campeonato
