@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class TimeResultado {
+	
 	private String nome;
 	private String situacao;
 	private int jogosDisputados;

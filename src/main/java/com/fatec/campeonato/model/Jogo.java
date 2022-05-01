@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.util.Date;
 
 public class Jogo {
-
+	private int idJogo;
 	private String timeCasa;
 	private String grupoCasa;
 	private int golsCasa;
@@ -85,7 +85,6 @@ public class Jogo {
 	public void setData(Date data) {
 		this.data = data;
 	}
-	
 
 	@Override
 	public String toString() {
@@ -95,7 +94,7 @@ public class Jogo {
 
 	public static Jogo instantiateJogoFromResultSet(ResultSet rs) throws SQLException {
 		Jogo jogo = new Jogo();
-
+		jogo.setIdJogo(rs.getInt("id"));
 		jogo.setTimeCasa(rs.getString("timeCasa"));
 		jogo.setGrupoCasa(rs.getString("grupoCasa"));
 		jogo.setGolsCasa(rs.getInt("golsCasa"));
@@ -107,6 +106,30 @@ public class Jogo {
 		jogo.setData(rs.getDate("data"));
 
 		return jogo;
+	}
+	
+	public static Jogo instantiateJogoQuartDeFinalFromResultSet(ResultSet rs) throws SQLException {
+		Jogo jogo = new Jogo();
+		jogo.setTimeCasa(rs.getString("timeCasa"));
+		jogo.setGrupoCasa(rs.getString("grupoCasa"));
+		jogo.setGolsCasa(rs.getInt("golsCasa"));
+
+		jogo.setTimeFora(rs.getString("timeFora"));
+		jogo.setGrupoFora(rs.getString("grupoFora"));
+		jogo.setGolsFora(rs.getInt("golsFora"));
+
+		jogo.setData(rs.getDate("data"));
+
+		return jogo;
+	}
+
+
+	public int getIdJogo() {
+		return this.idJogo;
+	}
+
+	public void setIdJogo(int i) {
+		this.idJogo = i;
 	}
 
 }

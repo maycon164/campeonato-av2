@@ -11,6 +11,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.fatec.campeonato.model.AtualizarResultadoPartida;
 import com.fatec.campeonato.model.Jogo;
 import com.fatec.campeonato.model.Time;
 import com.fatec.campeonato.model.TimeResultado;
@@ -21,9 +22,15 @@ public class TorneioDao implements ITorneioDao {
 	@Autowired
 	private GenericDao gDao;
 
+	private Connection conn;
+
+	@Autowired
+	private void setConnection() {
+		this.conn = gDao.getConnection();
+	}
+
 	@Override
 	public List<Time> getTimes() throws SQLException, ClassNotFoundException {
-		Connection conn = gDao.getConnection();
 		List<Time> listaTimes = new ArrayList<Time>();
 
 		StringBuffer sql = new StringBuffer();
@@ -46,16 +53,14 @@ public class TorneioDao implements ITorneioDao {
 
 	@Override
 	public List<Jogo> getJogos(Date dataRodada) throws ClassNotFoundException, SQLException {
-		Connection conn = gDao.getConnection();
 
-		List<Jogo> listaJogos = new ArrayList<Jogo>();
-		String sql = "select * from jogos e WHERE data = ?";
-
-		PreparedStatement ps;
 		try {
-			ps = conn.prepareStatement(sql);
+			List<Jogo> listaJogos = new ArrayList<Jogo>();
+			String sql = "select * from jogos e WHERE data = ?";
+			PreparedStatement ps = conn.prepareStatement(sql);
 			ps.setDate(1, new java.sql.Date(dataRodada.getTime()));
 			ResultSet rs = ps.executeQuery();
+
 			while (rs.next()) {
 				Jogo jogo = Jogo.instantiateJogoFromResultSet(rs);
 				listaJogos.add(jogo);
@@ -64,11 +69,12 @@ public class TorneioDao implements ITorneioDao {
 			rs.close();
 			ps.close();
 
+			return listaJogos;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 
-		return listaJogos;
+		return null;
 	}
 
 	@Override
@@ -76,15 +82,12 @@ public class TorneioDao implements ITorneioDao {
 
 		gerarResultadoCampeonato();
 
-		Connection conn = gDao.getConnection();
-		List<TimeResultado> listaTimesResultados = new ArrayList<TimeResultado>();
-		PreparedStatement ps;
-
 		try {
+			List<TimeResultado> listaTimesResultados = new ArrayList<TimeResultado>();
 
 			String sql = "select * from campeonato";
 
-			ps = conn.prepareStatement(sql);
+			PreparedStatement ps = conn.prepareStatement(sql);
 			ResultSet rs = ps.executeQuery();
 
 			while (rs.next()) {
@@ -95,24 +98,66 @@ public class TorneioDao implements ITorneioDao {
 			rs.close();
 			ps.close();
 
+			return listaTimesResultados;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public List<Jogo> getQuartasDeFinal() throws ClassNotFoundException, SQLException {
+		gerarResultadoCampeonato();
+		try {
+			List<Jogo> listaJogos = new ArrayList<Jogo>();
+			String sql = "SELECT * FROM vw_quartas_de_final";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				Jogo jogo = Jogo.instantiateJogoQuartDeFinalFromResultSet(rs);
+				listaJogos.add(jogo);
+			}
+
+			rs.close();
+			ps.close();
+
+			return listaJogos;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 
-		return listaTimesResultados;
+		return null;
+	}
+
+	public void updatePartida(AtualizarResultadoPartida atz) {
+
+		try {
+			String sql = "UPDATE jogos SET golsCasa = ?, golsFora = ? WHERE id = ?";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setInt(1, atz.getGolsCasa());
+			ps.setInt(2, atz.getGolsFora());
+			ps.setInt(3, atz.getIdJogo());
+
+			int rs = ps.executeUpdate();
+
+			ps.close();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	private void gerarResultadoCampeonato() throws ClassNotFoundException, SQLException {
-		Connection conn = gDao.getConnection();
-		PreparedStatement ps;
 
 		try {
 			String sql = "EXEC resultado_geral";
-			ps = conn.prepareStatement(sql);
-			ResultSet rs = ps.executeQuery();
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.execute();
 
-		} catch (Exception e) {
-
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 	}
 
